@@ -19,8 +19,7 @@
 
 <h2>Recursive Common Table Expressions in Postgres</h2>
 
-Consider the following table and data <br />
-<p>
+Consider the following table and data <br /><br />
 <strong>ancestry</strong>
 <table>
   <tr>
@@ -42,7 +41,7 @@ Consider the following table and data <br />
     <td>5</td><td>|</td><td>dave</td><td>|</td><td>4</td>
   </tr>
 </table>
-</p>
+<br />
 We can select the names of everyone in Dave's family tree with this query: <br />
 <p>
 WITH RECURSIVE family (name, parent) AS (<br />
@@ -55,8 +54,8 @@ WITH RECURSIVE family (name, parent) AS (<br />
 SELECT name from family <br />
 </p>
 <p>
-This begins with the nonrecursive part:
-SELECT an.name, an.parent from ancestry an where id = 5
+This begins with the nonrecursive part:<br />
+SELECT an.name, an.parent from ancestry an where id = 5 <br />
 The results of this query are added to a result set, and then placed in a working set. In this simple example this is just one row, with Dave in it. This working set is referred to in the recursive step of the query, family points to it's data. So when we join family (initially Dave) on ancestry we get Bob.
 In general, at each step any new rows returned are added to the result set and used as the working set in the next iteration. When no new rows are found the process is complete and the result set is available to the final select query.
 </p>
