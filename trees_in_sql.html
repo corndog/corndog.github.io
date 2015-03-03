@@ -63,8 +63,7 @@ In general, at each step any new rows returned are added to the result set and u
  This introduces recursive CTEs, but for our purposes is limited in that each node only has one parent, so we can't reuse children/subtrees.
 </p>
 
-Consider another table and data, component_ids is an array. <br />
-<p>
+Consider another table and data, component_ids is an array. <br /><br />
 <strong>components</strong>
 <table>
   <tr>
@@ -92,7 +91,7 @@ Consider another table and data, component_ids is an array. <br />
     <td>7</td><td>|</td><td>form</td><td>|</td><td>details</td><td>|</td><td>{ 1, 6}</td>
   </tr>
 </table>
-</p>
+
 <p>
 Row 6 describes an address component, made up of 4 pieces, address 1 and 2, city and zip. Row 7 describes a form component made up of a name and an address. The following query selects all the rows necessary to construct a given node/subtree, in this case for the address component.
 </p>
