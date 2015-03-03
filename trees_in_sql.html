@@ -2,6 +2,7 @@
 <html>
 <head>
 <style>
+  body {padding: 20px;}
   td { align: right;}
 </style>
 </head>
@@ -12,7 +13,7 @@
 
 <p>Furthermore different pieces need to be reused across forms. Consider a course evaluation system, an online version of the bubble sheets colleges use for students to evaluate professors, may need to have a set of questions common across the college, then other groups of questions that individual departments want asked for their freshman classes, for example.</p>
 
-<p>The two implementations I've worked on before essentially had a table for level of the hierarchy they settled on. Some issues associated with this were inflexiblity and naive ORM usage with an N + 1 query problem at each level of the hierarchy.</p>
+<p>The two implementations of this kind of thing I've worked on before essentially had a table for each level of the hierarchy they settled on. Some issues associated with this were inflexiblity and naive ORM usage leading to an N + 1 query problem at each level of the hierarchy.</p>
 
 <p>Eventually the question became, can we represent our hierarchy in a flexible way, allowing reuse of nodes in the tree, and fetch all the information needed to display the form in a single query?</p>
 
