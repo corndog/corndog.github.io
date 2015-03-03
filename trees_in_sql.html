@@ -26,7 +26,7 @@ ancestry:
     <th>id</th><th>|</th><th>name</th><th>|</th><th>parent</th>
   </tr>
   <tr>
-    <td>1</td></td>|</td><td>fred</td><td>|</td><td></td>
+    <td>1</td><td>|</td><td>fred</td><td>|</td><td></td>
   </tr>
   <tr>
     <td>2</td><td>|</td><td>jill</td><td>|</td><td></td>
@@ -44,7 +44,7 @@ ancestry:
 
 We can select the names of everyone in Dave's family tree with this query: <br />
 <p>
-WITH RECURSIVE family(name, parent) AS (<br />
+WITH RECURSIVE family (name, parent) AS (<br />
  &nbsp SELECT name, parent from ancestry an where id = 5 <br />
  &nbsp UNION ALL <br />
  &nbsp SELECT a.name, a.parent  <br />
@@ -71,7 +71,7 @@ components:
     <th>id</th><th>|</th><th>component_type</th><th>|</th><th>label</th><th>|</th><th>component_ids</th>
   </tr>
   <tr>
-    <td>1</td><td>|<td></td>text</td><td>|</td><td>name</td><td>|</td><td></td>
+    <td>1</td><td>|</td><td>text</td><td>|</td><td>name</td><td>|</td><td></td>
   </tr>
   <tr>
     <td>2</td><td>|</td><td>text</td><td>|</td><td>address 1</td><td>|</td><td></td>
