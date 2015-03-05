@@ -102,20 +102,20 @@ Consider another table and data, component_ids is an array. <br /><br />
 Row 6 describes an address component, made up of 4 pieces, address 1 and 2, city and zip. Row 7 describes a form component made up of a name and an address. The following query selects all the rows necessary to construct a given node/subtree, in this case the address component.
 </p>
 <p>
-WITH RECURSIVE all_components (id, component_type, label, component_ids, root_id) as ( <br />
-&nbsp select id, component_type, label, component_ids, id from components where id = 6 <br />
+WITH RECURSIVE all_components (id, component_type, label, component_ids) as ( <br />
+&nbsp select id, component_type, label, component_ids from components where id = 6 <br />
 &nbsp UNION ALL  <br />
-&nbsp select q1.id, q1.component_type, q1.label, q1.component_ids, ac.root_id  <br />
+&nbsp select q1.id, q1.component_type, q1.label, q1.component_ids  <br />
 &nbsp from components q1  <br />
 &nbsp JOIN all_components ac ON q1.id = ANY (ac.component_ids)  <br />
  )  <br />
-select id, component_type, label, component_ids, root_id from all_components;  <br />
+select id, component_type, label, component_ids from all_components;  <br />
 </p>
 <p>
-The most interesting thing here is that we can join on the contents of an array. This allows to build our tree top down, each node having an arbitrary number of children, and nodes can be children of any number of parents. The other thing to note is we include the id of the root element in each row so it can be used in the where clause to select all the rows we want.
+The interesting thing here is that we can join on the contents of an array. This allows to build our tree top down, each node having an arbitrary number of children, and nodes can be children of any number of parents.
 </p>
 <p>
-Returning to our original problem of representing form inputs, we would probably want a value column as well to represent say an option in a select list. Anyway, since both our conceptual structure of the form and html itself is a tree we can explore a lot of ideas in this fairly simple framework.
+Returning to our original problem of representing form inputs, we would may want a value column as well to represent say an option in a select list. Anyway, since both our conceptual structure of the form and html itself is a tree we can explore a lot of ideas in this fairly simple framework.
 </p>
 </body>
 </html>
