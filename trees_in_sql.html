@@ -99,7 +99,7 @@ Consider another table and data, component_ids is an array. <br /><br />
 </table>
 
 <p>
-Row 6 describes an address component, made up of 4 pieces, address 1 and 2, city and zip. Row 7 describes a form component made up of a name and an address. The following query selects all the rows necessary to construct a given node/subtree, in this case the address component.
+Here we represent components of our form as either leaf elements, such as a simple text input, or what we could think of as compound elements, that is a component made up of subcomponents. For example row 6 describes an address component, made up of four text inputs, address 1 and 2, city and zip. Row 7 describes a form component made up of a name and an address. The following query selects all the rows necessary to construct a given component, address in this example.
 </p>
 <p>
 WITH RECURSIVE all_components (id, component_type, label, component_ids) as ( <br />
