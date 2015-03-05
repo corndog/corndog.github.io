@@ -45,7 +45,7 @@ Consider the following table and data <br /><br />
 We can select the names of everyone in Dave's family tree with this query: <br />
 <p>
 WITH RECURSIVE family (name, parent) AS (<br />
- &nbsp SELECT name, parent from ancestry an where id = 5 <br />
+ &nbsp SELECT name, parent from ancestry where id = 5 <br />
  &nbsp UNION ALL <br />
  &nbsp SELECT a.name, a.parent  <br />
  &nbsp FROM ancestry a <br />
@@ -55,8 +55,8 @@ SELECT name from family; <br />
 </p>
 <p>
 This begins with the nonrecursive part:<br />
-SELECT an.name, an.parent from ancestry an where id = 5 <br />
-The results of this query are added to a result set, and then placed in a working set. In this simple example this is just one row, with Dave in it. This working set is referred to in the recursive step of the query, family points to it's data. So when we join family (initially Dave) on ancestry we get Bob.
+SELECT name, parent from ancestry where id = 5 <br />
+The results of this query are added to a result set, and also placed in a working set. In this simple example this is just one row, with Dave in it. This working set is referred to in the recursive step of the query, family points to it's data. So when we join family (one row containing Dave) on ancestry we get Bob.
 In general, at each step any new rows returned are added to the result set and used as the working set in the next iteration. When no new rows are found the process is complete and the result set is available to the final select query.
 </p>
 <p>
@@ -115,7 +115,7 @@ select id, component_type, label, component_ids from all_components;  <br />
 The interesting thing here is that we can join on the contents of an array. This allows to build our tree top down, each node having an arbitrary number of children, and nodes can be children of any number of parents.
 </p>
 <p>
-Returning to our original problem of representing form inputs, we would may want a value column as well to represent say an option in a select list. Anyway, since both our conceptual structure of the form and html itself is a tree we can explore a lot of ideas in this fairly simple framework.
+Returning to our original problem of representing forms, this structure allows us to represent anything from a section heading to an option in a select input, although we may want a value column as well to represent a select option or radio button input. Anyway, since both our conceptual structure of the form and html itself is a tree we can explore a lot of ideas in this fairly simple framework.
 </p>
 </body>
 </html>
