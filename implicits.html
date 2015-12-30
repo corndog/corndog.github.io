@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+		<title>Introduction to Implicits in Scala</title>
+
+		<meta name="description" content="Introduction to Implicits in Scala">
+		<meta name="author" content="Hugh Richardson">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.6.2/css/reveal.min.css">
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.6.2/css/theme/solarized.css" id="theme">
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.6.2/lib/css/zenburn.css">
+	</head>
+
+	<body>
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<!-- INTRO -->
+				<section>
+					<h1>Implicits in Scala</h1>
+					<h3>How and Why</h3>
+					<h4>A fancy quote from someone</h4>
+				</section>
+
+
+				<!-- Implicit Parameters- basics -->
+				<section>
+					
+						<h3>Implicit Parameters</h3>
+						
+						<div class="fragment">
+							<pre><code data-trim>
+def func(x: Int)(y: Int): x * y
+							</code></pre>
+							<p>func(3)(4) = 12
+						</div>
+						
+
+						<div class="fragment">
+							<pre><code data-trim>
+implicit val z: Int = 2
+def func(x: Int)(implicit y: Int) = x * y
+							</code></pre>
+							<p>func(3)(4) = 12
+							<p>func(3) = 6
+						</div>
+
+						<div class="fragment">
+							<p>If a parameter is marked implicit, if you leave it out the compiler will look for a value of that type marked as implicit and insert it for you. 
+						</div>
+
+
+				</section>
+
+
+				<!-- Implicit conversions and classes -->
+				<section>
+				
+						<h3>Implicit conversions</h3>
+
+						<div class="fragment">
+							<pre><code data-trim>
+implicit def arbitraryStringToInt(str: String): Int = str.length * 10
+def func(x: Int): Int = x + 1
+							</pre></code>
+							<p>func(5) = 6
+							<p>func("cat") = 31
+						</div>
+				
+
+					<div class="fragment">
+						If you call a method with a parameter of the wrong type, the compiler will try and find an implicit conversion from the type you are providing to the type expected by the method.
+					</div>
+			</section>
+
+					<!-- pimps -->
+			<section>
+				<h3>Enrichments</h3>
+
+					<div class="fragment">
+						<pre><code data-trim>
+5.isOdd  ???
+						</pre></code>
+					</div>
+
+					<div class="fragment">
+						<pre><code data-trim>
+class SuperInt(x: Int) {
+	def isEven: Boolean = x % 2 == 0
+	def isOdd: Boolean = !isEven
+}
+implicit def intToSuperInt(x: Int): SuperInt = new SuperInt(x)
+						</pre></code>
+					</div>
+
+					<div class="fragment">
+						<pre><code data-trim>
+implicit class EmbellishedInt(x: Int) {
+	def isEven: Boolean = x % 2 == 0
+	def isOdd: Boolean = !isEven
+	def times(y: Int): Int = x * y
+}
+						</pre></code>
+						<p>7.isOdd = true
+						<p>6 times 7 = 42
+					</div>
+
+				<div class="fragment">
+					If you invoke a method on an object and that object doesn't have that method, compiler looks for an implicit conversion from that obect type to one that does have the method.
+				</div>
+
+				<div class="fragment">
+					Why: see Predef for examples, StringOps/WrappedString
+				</div>
+
+			</section>
+
+
+			<!-- A sort of unification, implicit values and parameters revisited - typeclasses and context bounds -->
+			<section>
+
+			</section>
+
+			</div>
+		</div>
+
+
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.6.2/lib/js/head.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.6.2/js/reveal.min.js"></script>
+
+		<script>
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+				overview: true,
+				touch: true,
+				theme: 'solarized',
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+				dependencies: [
+					{ 
+						src: 'http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.6.2/lib/js/classList.js', 
+						condition: function() { return !document.body.classList; } 
+					},
+					{
+						src: 'http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.6.2/plugin/markdown/marked.js', 
+						condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ 
+						src: 'http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.6.2/plugin/markdown/markdown.js', 
+						condition: function() { return !!document.querySelector( '[data-markdown]' ); } 
+					},
+					{ 
+						src: 'http://cdnjs.cloudflare.com/ajax/libs/reveal.js/2.6.2/plugin/highlight/highlight.js', 
+						async: true, 
+						callback: function() { hljs.initHighlightingOnLoad(); } 
+					}
+				]
+			});
+		</script>
+	</body>
+</html>
+
+
