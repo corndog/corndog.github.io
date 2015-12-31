@@ -28,12 +28,37 @@
 					<h1>Implicits in Scala</h1>
 					<h3>How and Why</h3>
 					<h4>A fancy quote from someone</h4>
+					<hr size="5" style="background-color:black">
+				</section>
+
+				<!-- but first: multiple parameter lists -->
+				<section>
+					<p>but first
+					<h3>Multiple Parameter Lists</h3>
+					<p> You can do
+					<div><pre><code data-trim>
+def func(x: Int, y: Int): Int = x * y
+or
+def func(x: Int)(y: Int): Int = x * y
+					</code></pre></div>
+
+					<div class="fragment">
+						<p>Or
+							<div><pre><code data-trim>
+def func(a: Int, b: Int, c: Int, d: Int, e: Int) = ???
+or
+def func(a: Int, b: Int, c: Int)(d: Int, e: Int) = ???
+							</code></pre><div>
+
+							<p>You can divide up your arguments into separate groups.
+							<hr size="5" style="background-color:black">
+						</div>
+
 				</section>
 
 
 				<!-- Implicit Parameters- basics -->
 				<section>
-					
 						<h3>Implicit Parameters</h3>
 						
 						<div class="fragment">
@@ -55,55 +80,73 @@ def func(x: Int)(implicit y: Int) = x * y
 
 						<div class="fragment">
 							<p>If a parameter is marked implicit, if you leave it out the compiler will look for a value of that type marked as implicit and insert it for you. 
+							<hr size="5" style="background-color:black">
 						</div>
-
 
 				</section>
 
+				<!-- bad things: can't have two implicit values of same type in same place -->
 
-				<!-- Implicit conversions and classes -->
+
+				<!-- Implicit conversions -->
 				<section>
-				
 						<h3>Implicit conversions</h3>
 
 						<div class="fragment">
-							<pre><code data-trim>
+							<div><pre><code data-trim>
 implicit def arbitraryStringToInt(str: String): Int = str.length * 10
 def func(x: Int): Int = x + 1
-							</pre></code>
+							</pre></code></div>
 							<p>func(5) = 6
 							<p>func("cat") = 31
 						</div>
 				
-
 					<div class="fragment">
-						If you call a method with a parameter of the wrong type, the compiler will try and find an implicit conversion from the type you are providing to the type expected by the method.
+						<p>If you call a method with a parameter of the wrong type, the compiler will try and find an implicit conversion from the type you are providing to the type expected by the method.
+					
+						<hr size="5" style="background-color:black">
 					</div>
+
 			</section>
 
-					<!-- pimps -->
+			<!-- pimp my library -->
 			<section>
 				<h3>Enrichments</h3>
 
 					<div class="fragment">
-						<pre><code data-trim>
-5.isOdd  ???
-						</pre></code>
+						<p>What if wanted to do this?
+						<div><pre><code data-trim>
+5.isEven = false ???
+						</pre></code></div>
+						<p>Or
+						<div><pre><code data-trim>
+6 times 7 = 42 ???
+						</pre></code></div>
 					</div>
 
 					<div class="fragment">
-						<pre><code data-trim>
+						<div><pre><code data-trim>
 class SuperInt(x: Int) {
 	def isEven: Boolean = x % 2 == 0
-	def isOdd: Boolean = !isEven
 }
 implicit def intToSuperInt(x: Int): SuperInt = new SuperInt(x)
-						</pre></code>
+						</pre></code></div>
+						<p>5.isEven = false
 					</div>
 
+				<div class="fragment">
+					<p>If you invoke a method on an object and that object doesn't have that method, compiler looks for an implicit conversion from that obect type to one that does have the method.
+					<hr size="5" style="background-color:black">
+				</div>
+
+			</section>
+
+			<!-- pimp my library part 2-->
+			<section>
+				<h3>Enrichments</h3>
 					<div class="fragment">
 						<pre><code data-trim>
-implicit class EmbellishedInt(x: Int) {
+implicit class SuperInt(x: Int) {
 	def isEven: Boolean = x % 2 == 0
 	def isOdd: Boolean = !isEven
 	def times(y: Int): Int = x * y
@@ -114,19 +157,27 @@ implicit class EmbellishedInt(x: Int) {
 					</div>
 
 				<div class="fragment">
-					If you invoke a method on an object and that object doesn't have that method, compiler looks for an implicit conversion from that obect type to one that does have the method.
+					<p>If you invoke a method on an object and that object doesn't have that method, compiler looks for an implicit class of a type that has the method.
+					<hr size="5" style="background-color:black">
 				</div>
+				
+			</section>
 
-				<div class="fragment">
-					Why: see Predef for examples, StringOps/WrappedString
-				</div>
-
+			<!-- Simpler why's ...  -->
+			<section>
+					<h3>Why</h3>
+					<p>Lots of syntactic sugar/helpers in scala are implemented this way. See Predef for examples.
+					<p>E.g. 1 to 5  =  Range(1, 2, 3, 4, 5). from imlicit def intWrapper(x: Int): RichInt
+					<p>"cats".map(_.toUpper) = "CATS".  from implicit def augmentString(x: String): StringOps
+				
+				<hr size="5" style="background-color:black">
 			</section>
 
 
 			<!-- A sort of unification, implicit values and parameters revisited - typeclasses and context bounds -->
 			<section>
 
+				<hr size="5" style="background-color:black">
 			</section>
 
 			</div>
