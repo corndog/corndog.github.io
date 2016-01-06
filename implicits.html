@@ -35,17 +35,21 @@
 				<section>
 					<p>but first
 					<h3>Multiple Parameter Lists</h3>
-					<p> You can do
-					<div><pre><code data-trim>
+					<div class="fragment">
+						<p> You can do
+						<div><pre><code data-trim>
 def func(x: Int, y: Int): Int = x * y
 or
 def func(x: Int)(y: Int): Int = x * y
-					</code></pre></div>
+						</code></pre></div>
+					</div>
 
 					<div class="fragment">
 						<p>Or
 							<div><pre><code data-trim>
 def func(a: Int, b: Int, c: Int, d: Int, e: Int) = ???
+or
+def func(a: Int)(b: Int)(c: Int)(d: Int)(e: Int) = ???
 or
 def func(a: Int, b: Int, c: Int)(d: Int, e: Int) = ???
 							</code></pre><div>
@@ -65,17 +69,22 @@ def func(a: Int, b: Int, c: Int)(d: Int, e: Int) = ???
 							<pre><code data-trim>
 def func(x: Int)(y: Int): x * y
 							</code></pre>
-							<p>func(3)(4) = 12
+							<pre><code data-trim>
+func(3)(4) = 12
+func(3) = // uh oh: error: missing arguments for method func
+							</code></pre>
 						</div>
 						
 
 						<div class="fragment">
 							<pre><code data-trim>
-implicit val z: Int = 2
+implicit val a: Int = 2
 def func(x: Int)(implicit y: Int) = x * y
 							</code></pre>
-							<p>func(3)(4) = 12
-							<p>func(3) = 6
+							<pre><code data-trim>
+func(3)(4) = 12
+func(3) = 6
+							</code></pre>
 						</div>
 
 						<div class="fragment">
@@ -97,8 +106,10 @@ def func(x: Int)(implicit y: Int) = x * y
 implicit def arbitraryStringToInt(str: String): Int = str.length * 10
 def func(x: Int): Int = x + 1
 							</pre></code></div>
-							<p>func(5) = 6
-							<p>func("cat") = 31
+							<pre><code data-trim>
+func(5) = 6
+func("cat") = 31
+							</code></pre>
 						</div>
 				
 					<div class="fragment">
@@ -131,7 +142,9 @@ class SuperInt(x: Int) {
 }
 implicit def intToSuperInt(x: Int): SuperInt = new SuperInt(x)
 						</pre></code></div>
-						<p>5.isEven = false
+						<pre><code data-trim>
+5.isEven = false
+						</code></pre>
 					</div>
 
 				<div class="fragment">
@@ -152,8 +165,10 @@ implicit class SuperInt(x: Int) {
 	def times(y: Int): Int = x * y
 }
 						</pre></code>
-						<p>7.isOdd = true
-						<p>6 times 7 = 42
+						<pre><code data-trim>
+7.isOdd = true
+6 times 7 = 42
+						</code></pre>
 					</div>
 
 				<div class="fragment">
@@ -167,8 +182,8 @@ implicit class SuperInt(x: Int) {
 			<section>
 					<h3>Why</h3>
 					<p>Lots of syntactic sugar/helpers in scala are implemented this way. See Predef for examples.
-					<p>E.g. 1 to 5  =  Range(1, 2, 3, 4, 5). from imlicit def intWrapper(x: Int): RichInt
-					<p>"cats".map(_.toUpper) = "CATS".  from implicit def augmentString(x: String): StringOps
+					<p>1 to 5  =  Range(1, 2, 3, 4, 5) <br /> from imlicit def intWrapper(x: Int): RichInt
+					<p>"cats".map(_.toUpper) = "CATS" <br />  from implicit def augmentString(x: String): StringOps
 				
 				<hr size="5" style="background-color:black">
 			</section>
@@ -176,6 +191,12 @@ implicit class SuperInt(x: Int) {
 
 			<!-- A sort of unification, implicit values and parameters revisited - typeclasses and context bounds -->
 			<section>
+				<h3>Typeclass Pattern</h3>
+				<div>What if we want to provide similar "enrichments" across multiple types?  E.g. json.</div>
+
+				<div class="fragment">
+
+				</div>
 
 				<hr size="5" style="background-color:black">
 			</section>
