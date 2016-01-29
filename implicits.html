@@ -26,7 +26,7 @@
 				<!-- INTRO -->
 				<section>
 					<h1>Implicits in Scala</h1>
-					<h3>How and Why</h3>
+					<h3>An Introduction to How and Why</h3>
 					<h4>A fancy quote from someone</h4>
 					<hr size="5" style="background-color:black">
 				</section>
@@ -88,7 +88,14 @@ func(3) = 6
 						</div>
 
 						<div class="fragment">
-							<p>If a parameter is marked implicit, if you leave it out the compiler will look for a value of that type marked as implicit and insert it for you. 
+							<p>If a parameter is marked implicit, if you leave it out the compiler will look for a value of that type marked as implicit and insert it for you.
+						</div>
+						<div class="fragment"> 
+							<pre><code data-trim>
+func(3)
+becomes 
+func(3)(2)
+							</code></pre>
 							<hr size="5" style="background-color:black">
 						</div>
 
@@ -112,11 +119,17 @@ func("cat") = 31
 							</code></pre>
 						</div>
 				
-					<div class="fragment">
-						<p>If you call a method with a parameter of the wrong type, the compiler will try and find an implicit conversion from the type you are providing to the type expected by the method.
-					
+						<div class="fragment">
+							<p>If you call a method with a parameter of the wrong type, the compiler will try and find an implicit conversion from the type you are providing to the type expected by the method, and insert the call to that function.
+						</div>
+						<div class="fragment">
+							<pre><code data-trim>
+func("cat")
+becomes
+func(arbitraryStringToInt("cat"))
+							</code></pre>
 						<hr size="5" style="background-color:black">
-					</div>
+						</div>
 
 			</section>
 
