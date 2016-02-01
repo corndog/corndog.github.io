@@ -63,7 +63,7 @@ def func(a: Int, b: Int, c: Int)(d: Int, e: Int) = ???
 
 				<!-- Implicit Parameters- basics -->
 				<section>
-						<h3>Implicit Parameters</h3>
+						<h3>Implicit Parameters (and Values)</h3>
 						
 						<div class="fragment">
 							<pre><code data-trim>
@@ -99,6 +99,21 @@ func(3)(2)
 							<hr size="5" style="background-color:black">
 						</div>
 
+				</section>
+
+				<section>
+					<h3>Implicit Parameters (and Values) ...</h3>
+					<div>Parameters marked as implicit are available as implicit values while in scope</div>
+					<div><pre><code data-trim>
+def func1(x: String)(implicit h: Helper) = {
+	y.help(x)
+}
+def func2(a: Int, b:String)(implicit h: Helper) = {
+	func1(b)
+	...
+}
+					</code></pre></div>
+					<p>Reduce boilerplate of passing along a parameter.
 				</section>
 
 				<!-- bad things: can't have two implicit values of same type in same place -->
@@ -254,7 +269,7 @@ implicit object MyClassFeature extends Feature[MyClass] {
 					</code></pre>
 				</div>
 
-				<div class="fragment"><div class="fragment">
+				<div class="fragment">
 					<pre><code data-trim>
 def usesFeature[T](x: T)(implicit evidence: Feature[T]) = evidence.impl(x)
 					</code></pre>
