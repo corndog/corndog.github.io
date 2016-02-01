@@ -112,7 +112,7 @@ func(3)(2)
 							<div><pre><code data-trim>
 implicit def arbitraryStringToInt(str: String): Int = str.length * 10
 def func(x: Int): Int = x + 1
-							</pre></code></div>
+							</code></pre></div>
 							<pre><code data-trim>
 func(5) = 6
 func("cat") = 31
@@ -140,12 +140,12 @@ func(arbitraryStringToInt("cat"))
 					<div class="fragment">
 						<p>What if wanted to do this?
 						<div><pre><code data-trim>
-5.isEven = false ???
-						</pre></code></div>
+5.isEven  (false)
+						</code></pre></div>
 						<p>Or
 						<div><pre><code data-trim>
-6 times 7 = 42 ???
-						</pre></code></div>
+6 times 7  (42)
+						</code></cpre></div>
 					</div>
 
 					<div class="fragment">
@@ -154,9 +154,10 @@ class SuperInt(x: Int) {
 	def isEven: Boolean = x % 2 == 0
 }
 implicit def intToSuperInt(x: Int): SuperInt = new SuperInt(x)
-						</pre></code></div>
+						</code></pre></div>
 						<pre><code data-trim>
-5.isEven = false
+5.isEven 
+res1: Boolean = false
 						</code></pre>
 					</div>
 
@@ -169,7 +170,7 @@ implicit def intToSuperInt(x: Int): SuperInt = new SuperInt(x)
 
 			<!-- pimp my library part 2-->
 			<section>
-				<h3>Enrichments</h3>
+				<h3>Enrichments ...</h3>
 					<div class="fragment">
 						<pre><code data-trim>
 implicit class SuperInt(x: Int) {
@@ -177,15 +178,17 @@ implicit class SuperInt(x: Int) {
 	def isOdd: Boolean = !isEven
 	def times(y: Int): Int = x * y
 }
-						</pre></code>
+						</code></pre>
 						<pre><code data-trim>
-7.isOdd = true
-6 times 7 = 42
+7.isOdd 
+res1: Boolean = true
+6 times 7 
+res2: Int = 42
 						</code></pre>
 					</div>
 
 				<div class="fragment">
-					<p>If you invoke a method on an object and that object doesn't have that method, compiler looks for an implicit class of a type that has the method.
+					<p>If you invoke a method on an object and that object doesn't have that method, compiler looks for an implicit class that has the method.
 					<hr size="5" style="background-color:black">
 				</div>
 				
@@ -195,7 +198,7 @@ implicit class SuperInt(x: Int) {
 			<section>
 					<h3>Why</h3>
 					<p>Lots of syntactic sugar/helpers in scala are implemented this way. See Predef for examples.
-					<p>1 to 5  =  Range(1, 2, 3, 4, 5) <br /> from imlicit def intWrapper(x: Int): RichInt
+					<p>1 to 5  =  Range(1, 2, 3, 4, 5) <br /> from implicit def intWrapper(x: Int): RichInt
 					<p>"cats".map(_.toUpper) = "CATS" <br />  from implicit def augmentString(x: String): StringOps
 				
 				<hr size="5" style="background-color:black">
@@ -206,14 +209,117 @@ implicit class SuperInt(x: Int) {
 			<section>
 				<h3>Typeclass Pattern</h3>
 				<div>What if we want to provide similar "enrichments" across multiple types?  E.g. json.</div>
-
 				<div class="fragment">
+					<pre><code data-trim>
+trait Feature[T] {
+	def impl(x: T): ??
+}
 
+implicit object IntFeature extends Feature[Int] {
+	def impl(x: Int) : ???
+}
+					</code></pre>
 				</div>
 
-				<hr size="5" style="background-color:black">
+				<div class="fragment">
+					<pre><code data-trim>
+trait Feature[T] {
+	def impl(x: T): Unit
+}
+
+implicit object IntFeature extends Feature[Int] {
+	def impl(x: Int) : println(s"int feature for $x")
+}
+					</code></pre>
+				</div>
+
+				<div class="fragment">
+					<pre><code data-trim>
+val intF = implicitly[Feature[Int]]
+intF.impl(5) // int feature for 5
+					</code></pre>
+					<hr size="5" style="background-color:black">
+				</div>
 			</section>
 
+			<section>
+				<h3>Typeclass Pattern ...</h3>
+				<div class="fragment">
+					<pre><code data-trim>
+case class MyClass(i: Int, s: String)
+
+implicit object MyClassFeature extends Feature[MyClass] {
+	def impl(x: MyClass) = println(s"feature for MyClass ${x.i}, ${x.s}")
+}
+					</code></pre>
+				</div>
+
+				<div class="fragment"><div class="fragment">
+					<pre><code data-trim>
+def usesFeature[T](x: T)(implicit evidence: Feature[T]) = evidence.impl(x)
+					</code></pre>
+				</div>
+
+				<div class="fragment">
+					<pre><code data-trim>
+usesFeature(5)
+// feature for 5
+usesFeature(MyClass(9, "bananas"))
+// feature for MyClass 9 bananas
+					</code></pre>
+				</div>
+
+				<div class="fragment">
+					<p>Evidence?  The existence of an implicit value of type Feature[T] provides evidence that we can provide the feature for type T...
+					<hr size="5" style="background-color:black">
+				</div>
+
+			</section>
+
+			<section>
+				<h3>Typeclass Pattern ...</h3>
+				<div class="fragment">
+					<pre><code data-trim>
+usesFeature(MyClass(9, "bananas"))
+// feature for MyClass 9 bananas
+usesFeature(List(1,2))
+// error: could not find implicit value for parameter evidence: Feature[List[Int]]
+					</code></pre>
+					<hr size="5" style="background-color:black">
+				</div>
+
+			</section>
+
+			<section>
+				<h3>Context Bounds</h3>
+				<div class="fragment">
+					<pre><code data-trim>
+def checkFeature[T : Feature](x: T): T = x
+					</code></pre>
+				</div>
+
+				<div class="fragment">
+					<pre><code data-trim>
+checkFeature(7)
+// 7
+checkFeature(9.99)
+// error: cound not find implicit value for evidence parameter of type Feature[Double]
+					</code></pre>
+				</div>
+
+			<div class="fragment">
+				This
+					<pre><code data-trim>
+def checkFeature[T : Feature](x: T): T = x
+					</code></pre>
+				Is just syntactic suger for
+					<pre><code data-trim>
+def checkFeature[T](x: T)(implicit ev: Feature[T]): T = x
+					</code></pre>
+			</div>
+		</section>
+
+			<!-- end -->
 			</div>
 		</div>
 
