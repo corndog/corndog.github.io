@@ -63,15 +63,17 @@ def func(a: Int, b: Int, c: Int)(d: Int, e: Int) = ???
 
 				<!-- Implicit Parameters- basics -->
 				<section>
-						<h3>Implicit Parameters (and Values)</h3>
+						<h3>Implicit Parameters and Values</h3>
 						
 						<div class="fragment">
 							<pre><code data-trim>
 def func(x: Int)(y: Int): x * y
 							</code></pre>
 							<pre><code data-trim>
-func(3)(4) = 12
-func(3) = // uh oh: error: missing arguments for method func
+func(3)(4)
+res1: Int = 12
+func(3)
+error: missing arguments for method func
 							</code></pre>
 						</div>
 						
@@ -82,8 +84,10 @@ implicit val a: Int = 2
 def func(x: Int)(implicit y: Int) = x * y
 							</code></pre>
 							<pre><code data-trim>
-func(3)(4) = 12
-func(3) = 6
+func(3)(4)
+res1: Int = 12
+func(3)
+res2: Int = 6
 							</code></pre>
 						</div>
 
@@ -102,18 +106,20 @@ func(3)(2)
 				</section>
 
 				<section>
-					<h3>Implicit Parameters (and Values) ...</h3>
+					<h3>Implicit Parameters and Values ...</h3>
 					<div>Parameters marked as implicit are available as implicit values while in scope</div>
 					<div><pre><code data-trim>
 def func1(x: String)(implicit h: Helper) = {
-	y.help(x)
+	h.help(x)
 }
 def func2(a: Int, b:String)(implicit h: Helper) = {
 	func1(b)
 	...
 }
 					</code></pre></div>
-					<p>Reduce boilerplate of passing along a parameter.
+					<div>Reduce boilerplate of passing along a parameter.</div>
+					<div>e.g Play:  Action { implicit request => ...}
+					<hr size="5" style="background-color:black">
 				</section>
 
 				<!-- bad things: can't have two implicit values of same type in same place -->
@@ -129,8 +135,10 @@ implicit def arbitraryStringToInt(str: String): Int = str.length * 10
 def func(x: Int): Int = x + 1
 							</code></pre></div>
 							<pre><code data-trim>
-func(5) = 6
-func("cat") = 31
+func(5)
+res1: Int = 6
+func("cat")
+res2: Int = 31
 							</code></pre>
 						</div>
 				
@@ -148,6 +156,18 @@ func(arbitraryStringToInt("cat"))
 
 			</section>
 
+			<section>
+				By the way ...
+				<div class="fragment">
+	
+					<pre><code data-trim>
+implicit def arbitraryStringToInt(str: String): Int = ...
+					</code></pre>
+		Don't actually do this!
+						<hr size="5" style="background-color:black">
+				</div>
+			</section>
+
 			<!-- pimp my library -->
 			<section>
 				<h3>Enrichments</h3>
@@ -155,11 +175,13 @@ func(arbitraryStringToInt("cat"))
 					<div class="fragment">
 						<p>What if wanted to do this?
 						<div><pre><code data-trim>
-5.isEven  (false)
+5.isEven
+res1: Boolean = false
 						</code></pre></div>
 						<p>Or
 						<div><pre><code data-trim>
-6 times 7  (42)
+6 times 7
+res2: Int = 42
 						</code></cpre></div>
 					</div>
 
@@ -177,7 +199,7 @@ res1: Boolean = false
 					</div>
 
 				<div class="fragment">
-					<p>If you invoke a method on an object and that object doesn't have that method, compiler looks for an implicit conversion from that obect type to one that does have the method.
+					<p>If you invoke a method on an object that doesn't have that method, the compiler looks for an implicit conversion from that obect type to one that does have the method.
 					<hr size="5" style="background-color:black">
 				</div>
 
@@ -199,11 +221,13 @@ implicit class SuperInt(x: Int) {
 res1: Boolean = true
 6 times 7 
 res2: Int = 42
+3.times(4)
+res3: Int = 12
 						</code></pre>
 					</div>
 
 				<div class="fragment">
-					<p>If you invoke a method on an object and that object doesn't have that method, compiler looks for an implicit class that has the method.
+					<p>If you invoke a method on an object that doesn't have that method, the compiler looks for an implicit class that has the method.
 					<hr size="5" style="background-color:black">
 				</div>
 				
@@ -243,8 +267,10 @@ trait Feature[T] {
 }
 
 implicit object IntFeature extends Feature[Int] {
-	def impl(x: Int) : println(s"int feature for $x")
+	def impl(x: Int) = println(s"int feature for $x")
 }
+or
+implicit val intFeature = new Feature[Int] {...}
 					</code></pre>
 				</div>
 
