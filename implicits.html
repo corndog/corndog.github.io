@@ -27,7 +27,6 @@
 				<section>
 					<h1>Implicits in Scala</h1>
 					<h3>An Introduction to How and Why</h3>
-					<h4>A fancy quote from someone</h4>
 					<hr size="5" style="background-color:black">
 				</section>
 
@@ -106,8 +105,20 @@ func(3)(2)
 				</section>
 
 				<section>
+					<h3>Implicit Values and Parameters ...</h3>
+					<p> Implicits need to be unambiguous.
+						<pre><code data-trim>
+implicit val a: Int = 2
+implicit val b: Int = 99
+def func(x: Int)(implicit y: Int) = x * y
+// error: ambiguous implicit values:
+						</code></pre>
+					<hr size="5" style="background-color:black">
+				</section>
+
+				<section>
 					<h3>Implicit Parameters and Values ...</h3>
-					<div>Parameters marked as implicit are available as implicit values while in scope</div>
+					<div>Parameters marked as implicit are available as implicit values</div>
 					<div><pre><code data-trim>
 def func1(x: String)(implicit h: Helper) = {
 	h.help(x)
@@ -311,6 +322,7 @@ usesFeature(MyClass(9, "bananas"))
 				</div>
 
 				<div class="fragment">
+					<p>On the basis of the type we call usesFeature with, compiler finds the right implicit value.
 					<p>Evidence?  The existence of an implicit value of type Feature[T] provides evidence that we can provide the feature for type T...
 					<hr size="5" style="background-color:black">
 				</div>
@@ -330,6 +342,22 @@ usesFeature(List(1,2))
 				</div>
 
 			</section>
+
+			<section>
+				<h3>Typeclass pattern ...</h3>
+				<div class="fragment">
+				<p>Or provide the implicit class so you can call the feature directly
+					<pre><code data-trim>
+implicit class FeatureOps[T : Feature](x: T) {
+	def impl = implicitly[Feature[T]].impl(x) 
+}
+8.impl
+// feature for 8
+					</code></pre>
+					<hr size="5" style="background-color:black">
+				</div>
+			</section>
+
 
 			<section>
 				<h3>Context Bounds</h3>
@@ -357,6 +385,7 @@ def checkFeature[T : Feature](x: T): T = x
 					<pre><code data-trim>
 def checkFeature[T](x: T)(implicit ev: Feature[T]): T = x
 					</code></pre>
+				<hr size="5" style="background-color:black">
 			</div>
 		</section>
 
