@@ -370,7 +370,7 @@ def checkFeature[T : Feature](x: T): T = x
 				<div class="fragment">
 					<pre><code data-trim>
 checkFeature(7)
-// 7
+res1: Int = 7
 checkFeature(9.99)
 // error: cound not find implicit value for evidence parameter of type Feature[Double]
 					</code></pre>
@@ -387,6 +387,57 @@ def checkFeature[T](x: T)(implicit ev: Feature[T]): T = x
 					</code></pre>
 				<hr size="5" style="background-color:black">
 			</div>
+		</section>
+
+		<section>
+			<h3>Type class pattern ..</h3>
+			<p>An example: sorting.  
+			<div class="fragment">
+				<pre><code data-trim>
+List(2,4,3,5).sorted
+res1: List[Int] = List(2,3,4,5)
+				</code></pre>
+			</div>
+
+			<div class="fragment">
+				<pre><code data-trim>
+case class Things(x: Int, y: String)
+List(Things(2, "2"), Things(4, "5"), Things(2,"3")).sorted
+//error: No implicit Ordering defined for Things
+				</code></pre>
+			</div>
+
+			<div class="fragment">
+				<p>in scala.collection.immutable.List
+				<pre><code data-trim>
+def sorted[B >: A](implicit ord: math.Ordering[B]): List[A]
+				</code></pre>
+			</div>
+
+			<div class="fragment">
+				<pre><code data-trim>
+implicit object ThingsOrdering extends math.Ordering[Things] { 
+	def compare(a: Things, b: Things): Int = 
+		if ( (a.x compare b.x) == 0) 
+			a.y compare b.y 
+		else 
+			a.x compare b.x
+}
+List(Things(2, "2"), Things(4, "5"), Things(2,"3")).sorted
+res1: List[Things] = List(Things(2,2), Things(2,3), Things(4,5))
+				</code></pre>
+				<hr size="5" style="background-color:black">
+			</div>
+
+		</section>
+
+		<section>
+			<h3>Type class pattern ...</h3>
+			<div>
+<p>Retroactive extension: conforming to an interface without access to source code.
+<p>Separation of data and behavior...
+			</div>
+
 		</section>
 
 			<!-- end -->
