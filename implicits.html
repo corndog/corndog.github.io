@@ -106,6 +106,15 @@ func(3)(2)
 
 				<section>
 					<h3>Implicit Values and Parameters ...</h3>
+					<div class="fragment">
+						<p>Implicit parameters go in the last parameter list
+							<pre><code data-trim>
+def func(x: Int)(implicit y: Int, h: Helper) = ...
+						</code></pre>
+						<p>Both y and h are implicit
+					</div>
+
+					<div class="fragment">
 					<p> Implicits need to be unambiguous.
 						<pre><code data-trim>
 implicit val a: Int = 2
@@ -114,6 +123,7 @@ def func(x: Int)(implicit y: Int) = x * y
 // error: ambiguous implicit values:
 						</code></pre>
 					<hr size="5" style="background-color:black">
+				</div>
 				</section>
 
 				<section>
@@ -381,7 +391,7 @@ checkFeature(9.99)
 					<pre><code data-trim>
 def checkFeature[T : Feature](x: T): T = x
 					</code></pre>
-				Is just syntactic suger for
+				Is just syntactic sugar for
 					<pre><code data-trim>
 def checkFeature[T](x: T)(implicit ev: Feature[T]): T = x
 					</code></pre>
@@ -390,7 +400,7 @@ def checkFeature[T](x: T)(implicit ev: Feature[T]): T = x
 		</section>
 
 		<section>
-			<h3>Type class pattern ..</h3>
+			<h3>Typeclass pattern ...</h3>
 			<p>An example: sorting.  
 			<div class="fragment">
 				<pre><code data-trim>
@@ -432,7 +442,7 @@ res1: List[Things] = List(Things(2,2), Things(2,3), Things(4,5))
 		</section>
 
 		<section>
-			<h3>Type class pattern ...</h3>
+			<h3>Typeclass pattern ...</h3>
 			<div>
 <p>Retroactive extension: conforming to an interface without access to source code.
 <p>Separation of data and behavior...
